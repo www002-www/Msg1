@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Message</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffb3b3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        input {
+            padding: 1rem;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #ff6b6b;
+        }
+
+        button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff6b6b;
+        }
+
+        .message {
+            display: none;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .error {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
+            font-size: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .heart {
+            font-size: 4rem;
+            color: #ff6b6b;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="inputPage">
+        <h1>✨ Special Message Portal ✨</h1>
+        <p>Please enter your name to continue:</p>
+        <input type="text" id="nameInput" placeholder="Enter your name...">
+        <button onclick="checkName()">Continue</button>
+    </div>
+
+    <div class="container message" id="messagePage">
+        <div class="heart">❤️</div>
+        <h2>Dear <span id="userName"></span>,</h2>
+        <p>You mean the world to me! 🌍<br>
+        Your smile lights up my day ☀️<br>
+        Thank you for being amazing! 💖<br>
+        You're truly special! 🌟</p>
+        <div class="heart">❤️</div>
+    </div>
+
+    <div class="container error" id="errorPage">
+        <h2>⚠️ Oops! ⚠️</h2>
+        <p>You're not the special person we're looking for.<br>
+        Please bring the intended recipient.</p>
+        <button onclick="goBack()">Try Again</button>
+    </div>
+
+    <script>
+        const correctName = "Heena"; // Change this to the desired name
+
+        function checkName() {
+            const inputName = document.getElementById('nameInput').value.trim();
+            const inputPage = document.getElementById('inputPage');
+            const messagePage = document.getElementById('messagePage');
+            const errorPage = document.getElementById('errorPage');
+
+            if (inputName.toLowerCase() === correctName.toLowerCase()) {
+                inputPage.style.display = 'none';
+                document.getElementById('userName').textContent = inputName;
+                messagePage.style.display = 'block';
+                createConfetti();
+            } else {
+                inputPage.style.display = 'none';
+                errorPage.style.display = 'flex';  
+                errorPage.style.opacity = '1';  // ✅ Make sure error page is fully visible
+                errorPage.classList.add('shake'); // ✅ Adds shake animation
+                setTimeout(() => errorPage.classList.remove('shake'), 500); // Remove shake after 0.5s
+            }
+        }
+
+        function goBack() {
+            document.getElementById('errorPage').style.display = 'none';
+            document.getElementById('errorPage').style.opacity = '0';
+            document.getElementById('inputPage').style.display = 'block';
+            document.getElementById('nameInput').value = '';
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                document.body.appendChild(confetti);
+            }
+        }
+    </script>
+</body>
+</html>
